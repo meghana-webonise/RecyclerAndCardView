@@ -1,37 +1,47 @@
 package com.weboniselab.meghana.android.app.recyclerandcardview;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+    String name,age;
+    EditText tvAge,tvName;
+    Button btnAdd;
+    DatabaseOperations databaseOperations;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        initialise();
+    }
+
+    public void initialise(){
+        tvName=(EditText) findViewById(R.id.tvName);
+        tvAge=(EditText) findViewById(R.id.tvAge);
+        btnAdd=(Button) findViewById(R.id.btnAdd);
+        btnAdd.setOnClickListener(this);
+        databaseOperations=new DatabaseOperations(this);
+        name=tvName.getText().toString();
+        Log.d("********",name);
+        age=tvAge.getText().toString();
+
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
+    public void onClick(View v) {
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        databaseOperations.addDetailsToDatabase(name,age);
+        Intent intent=new Intent(MainActivity.this,RecyclerView.class);
+        startActivity(intent);
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 }
